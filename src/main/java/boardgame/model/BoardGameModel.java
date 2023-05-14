@@ -1,5 +1,6 @@
 package boardgame.model;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
 public class BoardGameModel {
@@ -14,6 +15,25 @@ public class BoardGameModel {
                 board[i][j] = new ReadOnlyObjectWrapper<Square>(Square.EMPTY);
             }
         }
+        board[1][4] = new ReadOnlyObjectWrapper<Square>(Square.BALL);
+    }
+
+    public ReadOnlyObjectProperty<Square> squareProperty(int i, int j) {
+        return board[i][j].getReadOnlyProperty();
+    }
+
+    public Square getSquare(int i, int j) {
+        return board[i][j].get();
+    }
+
+
+    public void move(int i, int j) {
+        board[i][j].set(
+                switch (board[i][j].get()) {
+                    case EMPTY -> Square.BALL;
+                    case BALL -> Square.EMPTY;
+                }
+        );
     }
 
     public String toString() {
