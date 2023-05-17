@@ -1,50 +1,78 @@
 package boardgame;
 
 import boardgame.model.BoardGameModel;
+import boardgame.model.Direction;
+import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
-import javafx.scene.layout.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import org.tinylog.Logger;
 
 public class BoardGameController {
 
     @FXML
-    private GridPane board;
+    private GridPane gridPane;
 
-    private BoardGameModel model = new BoardGameModel();
+    final private BoardGameModel model = new BoardGameModel();
 
     @FXML
     private void initialize() {
-        for (var i = 0; i < board.getRowCount(); i++) {
-            for (var j = 0; j < board.getColumnCount(); j++) {
+        populateGrid();
+        registerKeyEventHandler();
+    }
+
+    private void populateGrid(){
+        for (var i = 0; i < gridPane.getRowCount(); i++) {
+            for (var j = 0; j < gridPane.getColumnCount(); j++) {
                 var square = createSquare(i, j);
-                board.add(square, j, i);
+                gridPane.add(square, j, i);
             }
         }
     }
 
-    private StackPane createSquare(int i, int j) {
+    private StackPane createSquare(int row, int col) {
         var square = new StackPane();
         square.getStyleClass().add("square");
         var piece = new Circle(50);
-        piece.fillProperty().bind(
-                new ObjectBinding<Paint>() {
-                    {
-                        super.bind(model.squareProperty(i, j));
-                    }
-                    @Override
-                    protected Paint computeValue() {
-                        return switch (model.squareProperty(i, j).get()) {
-                            case EMPTY -> Color.TRANSPARENT;
-                            case BALL -> Color.BLUE;
-                        };
-                    }
-                }
-        );
-        square.getChildren().add(piece);
-
         return square;
     }
+
+    private void registerKeyEventHandler() {
+        Platform.runLater(() -> gridPane.getScene().setOnKeyPressed(this::handleKeyPress));
+    }
+
+    @FXML
+    private void handleKeyPress(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.UP) {
+            Logger.debug("UP pressed");
+            performMove(Direction.UP);
+        } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+            Logger.debug("RIGHT pressed");
+            performMove(Direction.RIGHT);
+        } else if (keyEvent.getCode() == KeyCode.DOWN) {
+            Logger.debug("DOWN pressed");
+            performMove(Direction.DOWN);
+        } else if (keyEvent.getCode() == KeyCode.LEFT) {
+            Logger.debug("LEFT pressed");
+            performMove(Direction.LEFT);
+        }
+    }
+
+    private void performMove(Direction direction) {
+        if (model.canMove(direction)) {
+            Logger.info("Moving {}", direction);
+            model.move(direction);
+            Logger.trace("New state: {}", model);
+        } else {
+            Logger.warn("Invalid move: {}", direction);
+        }
+    }
 }
+

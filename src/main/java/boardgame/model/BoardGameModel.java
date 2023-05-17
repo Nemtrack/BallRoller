@@ -1,54 +1,180 @@
 package boardgame.model;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import java.util.ArrayList;
 
 public class BoardGameModel {
 
+    /**
+     * The size of the board.
+     */
     public static final int BOARD_SIZE = 7;
 
-    private ReadOnlyObjectWrapper<Square>[][] board = new ReadOnlyObjectWrapper[BOARD_SIZE][BOARD_SIZE];
+    /**
+     * The Position of the goal.
+     */
+    private static final Position goal = new Position(5, 2);
 
-    public BoardGameModel(){
-        for (var i = 0 ; i < BOARD_SIZE; i++){
-            for (var j = 0; j < BOARD_SIZE; j++){
-                board[i][j] = new ReadOnlyObjectWrapper<Square>(Square.EMPTY);
-            }
-        }
-        board[1][4] = new ReadOnlyObjectWrapper<Square>(Square.BALL);
+    public Position getGoal(){
+        return this.goal;
     }
 
-    public ReadOnlyObjectProperty<Square> squareProperty(int i, int j) {
-        return board[i][j].getReadOnlyProperty();
+    /**
+     * The starting position of the ball.
+     */
+    private final Position currentBallPosition = new Position(1, 4);
+
+    public Position getCurrentBallPosition(){
+        return this.currentBallPosition;
     }
 
-    public Square getSquare(int i, int j) {
-        return board[i][j].get();
+    private static final ArrayList<Position> hasUpperWalls = new ArrayList<>();
+
+    private void setHasUpperWalls(){
+        hasUpperWalls.add(new Position(1, 2));
+        hasUpperWalls.add(new Position(1, 6));
+        hasUpperWalls.add(new Position(3, 1));
+        hasUpperWalls.add(new Position(4, 3));
+        hasUpperWalls.add(new Position(4, 6));
+        hasUpperWalls.add(new Position(5, 0));
+        hasUpperWalls.add(new Position(5, 4));
+        hasUpperWalls.add(new Position(6, 2));
     }
 
+    private static final ArrayList<Position> hasRightWalls = new ArrayList<>();
 
-    public void move(int i, int j) {
-        board[i][j].set(
-                switch (board[i][j].get()) {
-                    case EMPTY -> Square.BALL;
-                    case BALL -> Square.EMPTY;
-                }
-        );
+    private void setHasRightWalls(){
+        hasRightWalls.add(new Position(0, 0));
+        hasRightWalls.add(new Position(0, 3));
+        hasRightWalls.add(new Position(2, 2));
+        hasRightWalls.add(new Position(2, 5));
+        hasRightWalls.add(new Position(3, 3));
+        hasRightWalls.add(new Position(3, 4));
+        hasRightWalls.add(new Position(5, 1));
+        hasRightWalls.add(new Position(5, 2));
+        hasRightWalls.add(new Position(6, 3));
+        hasRightWalls.add(new Position(6, 5));
     }
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
+    private static final ArrayList<Position> hasDownWalls = new ArrayList<>();
+
+    private void setHasDownWalls(){
+        hasDownWalls.add(new Position(0, 2));
+        hasDownWalls.add(new Position(0, 6));
+        hasDownWalls.add(new Position(2, 1));
+        hasDownWalls.add(new Position(3, 3));
+        hasDownWalls.add(new Position(3, 6));
+        hasDownWalls.add(new Position(4, 0));
+        hasDownWalls.add(new Position(4, 4));
+        hasDownWalls.add(new Position(5, 2));
+    }
+
+    private static final ArrayList<Position> hasLeftWalls = new ArrayList<>();
+
+    private void setHasLeftWalls(){
+        hasLeftWalls.add(new Position(0, 1));
+        hasLeftWalls.add(new Position(0, 4));
+        hasLeftWalls.add(new Position(2, 3));
+        hasLeftWalls.add(new Position(2, 6));
+        hasLeftWalls.add(new Position(3, 4));
+        hasLeftWalls.add(new Position(3, 5));
+        hasLeftWalls.add(new Position(5, 2));
+        hasLeftWalls.add(new Position(5, 3));
+        hasLeftWalls.add(new Position(6, 4));
+        hasLeftWalls.add(new Position(6, 6));
+    }
+
+    /**
+     * Initialization of the board.
+     */
+    public static final Square[][] board = new Square[BOARD_SIZE][BOARD_SIZE];
+
+    /**
+     * Setting up the walls for the board.
+     */
+    public BoardGameModel() {
         for (var i = 0; i < BOARD_SIZE; i++) {
             for (var j = 0; j < BOARD_SIZE; j++) {
-                sb.append(board[i][j].get().ordinal()).append(' ');
+                board[i][j] = new Square();
             }
-            sb.append('\n');
         }
-        return sb.toString();
+
+        for (var i = 0; i < BOARD_SIZE; i++) {
+            for (var j = 0; j < BOARD_SIZE; j++) {
+                board[i][0].setHasWallLeft(true);
+                board[i][6].setHasWallRight(true);
+                board[0][j].setHasWallUp(true);
+                board[6][j].setHasWallDown(true);
+            }
+        }
+
+        setHasUpperWalls();
+        for (Position hasUpperWall : hasUpperWalls) {
+            board[hasUpperWall.getRow()][hasUpperWall.getCol()].setHasWallUp(true);
+        }
+        setHasRightWalls();
+        for (Position hasRightWall : hasRightWalls) {
+            board[hasRightWall.getRow()][hasRightWall.getCol()].setHasWallRight(true);
+        }
+        setHasDownWalls();
+        for (Position hasDownWall : hasDownWalls) {
+            board[hasDownWall.getRow()][hasDownWall.getCol()].setHasWallDown(true);
+        }
+        setHasLeftWalls();
+        for (Position hasLeftWall : hasLeftWalls) {
+            board[hasLeftWall.getRow()][hasLeftWall.getCol()].setHasWallLeft(true);
+        }
     }
 
-    public static void main(String[] args) {
-        var model = new BoardGameModel();
-        System.out.println(model);
+    public boolean isOnBoard(Position position) {
+        return position.getRow() >= 0 && position.getRow() < BOARD_SIZE &&
+                position.getCol() >= 0 && position.getCol() < BOARD_SIZE;
+    }
+
+    public boolean isGameOver(){
+        return !currentBallPosition.equals(goal);
+    }
+
+    public void move(Direction direction){
+        switch (direction){
+            case UP, DOWN -> moveRow(direction);
+            case RIGHT, LEFT -> moveCol(direction);
+        }
+    }
+
+    public void moveRow(Direction direction){
+        if (canMove(direction))
+            while (isGameOver() && isOnBoard(currentBallPosition) && canMove(direction))
+                currentBallPosition.setRow(currentBallPosition.getRow() + direction.getRowChange());
+    }
+
+    public void moveCol(Direction direction){
+        if (canMove(direction))
+            while (isGameOver() && isOnBoard(currentBallPosition) && canMove(direction))
+                currentBallPosition.setCol(currentBallPosition.getCol() + direction.getColChange());
+    }
+
+    public boolean canMove(Direction direction) {
+        return switch (direction) {
+            case UP -> canMoveUp();
+            case RIGHT -> canMoveRight();
+            case DOWN -> canMoveDown();
+            case LEFT -> canMoveLeft();
+        };
+    }
+
+    public boolean canMoveUp(){
+        return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallUp();
+    }
+
+    public boolean canMoveRight(){
+        return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallRight();
+    }
+
+    public boolean canMoveDown(){
+        return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallDown();
+    }
+
+    public boolean canMoveLeft(){
+        return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallLeft();
     }
 }

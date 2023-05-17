@@ -26,7 +26,8 @@
         <maven.checkstyle.version>3.2.1</maven.checkstyle.version>
         <maven.surefire.version>3.0.0</maven.surefire.version>
         <jacoco.version>0.8.9</jacoco.version>
-        <exec.mainClass><!-- TODO: the main class of your application that contains the main method --></exec.mainClass>
+        <tinylog.version>2.6.1</tinylog.version>
+        <exec.mainClass>boardgame.Main</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +41,18 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-api</artifactId>
+            <version>${tinylog.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-impl</artifactId>
+            <version>${tinylog.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
