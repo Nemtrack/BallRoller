@@ -40,4 +40,12 @@ public class Position {
         Position other = (Position) obj;
         return row == other.row && col == other.col;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }

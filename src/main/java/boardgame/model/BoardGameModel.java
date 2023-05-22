@@ -21,11 +21,7 @@ public class BoardGameModel {
     /**
      * The starting position of the ball.
      */
-    private final Position currentBallPosition = new Position(1, 4);
-
-    public Position getCurrentBallPosition(){
-        return this.currentBallPosition;
-    }
+    private static final Position currentBallPosition = new Position(1, 4);
 
     private static final ArrayList<Position> hasUpperWalls = new ArrayList<>();
 
@@ -131,26 +127,15 @@ public class BoardGameModel {
     }
 
     public boolean isGameOver(){
-        return !currentBallPosition.equals(goal);
+        return currentBallPosition.equals(goal);
     }
 
     public void move(Direction direction){
-        switch (direction){
-            case UP, DOWN -> moveRow(direction);
-            case RIGHT, LEFT -> moveCol(direction);
-        }
-    }
-
-    public void moveRow(Direction direction){
         if (canMove(direction))
-            while (isGameOver() && isOnBoard(currentBallPosition) && canMove(direction))
+            while (!isGameOver() && isOnBoard(currentBallPosition) && canMove(direction)) {
                 currentBallPosition.setRow(currentBallPosition.getRow() + direction.getRowChange());
-    }
-
-    public void moveCol(Direction direction){
-        if (canMove(direction))
-            while (isGameOver() && isOnBoard(currentBallPosition) && canMove(direction))
                 currentBallPosition.setCol(currentBallPosition.getCol() + direction.getColChange());
+            }
     }
 
     public boolean canMove(Direction direction) {
@@ -177,4 +162,10 @@ public class BoardGameModel {
     public boolean canMoveLeft(){
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallLeft();
     }
+
+    public Position getCurrentBallPosition(){
+        return this.currentBallPosition;
+    }
+
+
 }
