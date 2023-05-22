@@ -5,16 +5,14 @@ import boardgame.model.Direction;
 import boardgame.model.Position;
 import boardgame.model.Square;
 import javafx.application.Platform;
-import javafx.beans.Observable;
-import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import org.tinylog.Logger;
 
@@ -24,6 +22,7 @@ public class BoardGameController {
     private GridPane gridPane;
 
     final private BoardGameModel model = new BoardGameModel();
+
 
     Position previousStep = new Position(model.getCurrentBallPosition().getRow(), model.getCurrentBallPosition().getCol());
 
@@ -46,7 +45,7 @@ public class BoardGameController {
     private StackPane createSquare(int row, int col) {
         var square = new StackPane();
         square.getStyleClass().add("square");
-        var piece = new Circle(50);
+        square.setAlignment(Pos.CENTER);
         return square;
     }
 
@@ -82,13 +81,32 @@ public class BoardGameController {
         }
     }
 
+    private void removeBall() {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Circle) {
+                gridPane.getChildren().remove(node);
+                break;
+            }
+        }
+    }
+
+    private Circle createBall() {
+        Circle ball = new Circle(50, Color.BLUE);
+        return ball;
+    }
+
     public void draw() {
+        removeBall();
+
+        Position ballPosition = model.getCurrentBallPosition();
+        Circle ball = createBall();
+        gridPane.add(ball, ballPosition.getCol(), ballPosition.getRow());
+
         System.out.println(model.getCurrentBallPosition().toString());
         System.out.println(model.getCurrentBallPosition().getRow() * 7  + model.getCurrentBallPosition().getCol());
         for (int y = 0; y < model.BOARD_SIZE; y++) {
             for (int x = 0; x < model.BOARD_SIZE; x++) {
                 Square square = model.board[y][x];
-                var piece = new Circle(50);
                 String borderstyle = "-fx-border-color: black; -fx-border-width:";
                 borderstyle += square.isHasWallUp() ? " 5px" : " 1px";
                 borderstyle += square.isHasWallRight() ? " 5px" : " 1px";
@@ -98,17 +116,6 @@ public class BoardGameController {
                             borderstyle);
             }
         }
-//        Node circle = gridPane.getChildren().get(previousStep.getRow() * model.BOARD_SIZE + previousStep.getCol());
-        gridPane.getChildren().remove(player);
-        previousStep.setCol(model.getCurrentBallPosition().getCol());
-        previousStep.setRow(model.getCurrentBallPosition().getRow());
-        var player = new Circle(40);
-        player.setFill(Color.BLUE);
-        gridPane.add(player, model.getCurrentBallPosition().getCol(), model.getCurrentBallPosition().getRow());
-//                    piece.setStyle("fx-background-color:blue;");
-//                    gridPane.getChildren()
-//                            .get(model.getCurrentBallPosition().getRow() + model.getCurrentBallPosition().getCol())
-//                            .add(piece);
     }
 }
 
