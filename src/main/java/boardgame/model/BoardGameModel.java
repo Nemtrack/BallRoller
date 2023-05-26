@@ -9,6 +9,8 @@ public class BoardGameModel {
      */
     public static final int BOARD_SIZE = 7;
 
+    private static int steps = 0;
+
     /**
      * The Position of the goal.
      */
@@ -21,7 +23,9 @@ public class BoardGameModel {
     /**
      * The starting position of the ball.
      */
-    private static final Position currentBallPosition = new Position(1, 4);
+    private static final Position startingBallPosition = new Position(1, 4);
+
+    private static final Position currentBallPosition = new Position(startingBallPosition.getRow(), startingBallPosition.getCol());
 
     private static final ArrayList<Position> hasUpperWalls = new ArrayList<>();
 
@@ -130,6 +134,12 @@ public class BoardGameModel {
         return currentBallPosition.equals(goal);
     }
 
+    public void restartGame(){
+        currentBallPosition.setRow(startingBallPosition.getRow());
+        currentBallPosition.setCol(startingBallPosition.getCol());
+        steps = 0;
+    }
+
     public void move(Direction direction){
         if (canMove(direction))
             while (!isGameOver() && isOnBoard(currentBallPosition) && canMove(direction)) {
@@ -147,25 +157,31 @@ public class BoardGameModel {
         };
     }
 
-    public boolean canMoveUp(){
+    private boolean canMoveUp(){
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallUp();
     }
 
-    public boolean canMoveRight(){
+    private boolean canMoveRight(){
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallRight();
     }
 
-    public boolean canMoveDown(){
+    private boolean canMoveDown(){
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallDown();
     }
 
-    public boolean canMoveLeft(){
+    private boolean canMoveLeft(){
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallLeft();
+    }
+
+    public void incrementSteps(){
+        this.steps++;
+    }
+
+    public int getSteps(){
+        return this.steps;
     }
 
     public Position getCurrentBallPosition(){
         return this.currentBallPosition;
     }
-
-
 }

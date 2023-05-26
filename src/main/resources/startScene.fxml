@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.StartSceneController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="14.0" text="ESCAPE THE LABYRINTH" textAlignment="CENTER">
+         <font>
+            <Font name="Comic Sans MS" size="41.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="140.0" text="Enter your name!">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nameField" layoutX="281.0" layoutY="195.0" />
+      <Button alignment="CENTER" layoutX="335.0" layoutY="226.0" mnemonicParsing="false" onAction="#startGame" text="Play!" />
+   </children>
+</AnchorPane>

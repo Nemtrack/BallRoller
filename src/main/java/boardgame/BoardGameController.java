@@ -6,15 +6,21 @@ import boardgame.model.Position;
 import boardgame.model.Square;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import org.tinylog.Logger;
+
+import java.io.IOException;
 
 public class BoardGameController {
 
@@ -23,8 +29,6 @@ public class BoardGameController {
 
     final private BoardGameModel model = new BoardGameModel();
 
-
-    Position previousStep = new Position(model.getCurrentBallPosition().getRow(), model.getCurrentBallPosition().getCol());
 
     @FXML
     private void initialize() {
@@ -53,20 +57,57 @@ public class BoardGameController {
         Platform.runLater(() -> gridPane.getScene().setOnKeyPressed(this::handleKeyPress));
     }
 
+    public void draw() {
+        removeBall();
+
+        Position ballPosition = model.getCurrentBallPosition();
+        Circle ball = createBall();
+        gridPane.add(ball, ballPosition.getCol(), ballPosition.getRow());
+
+        for (int y = 0; y < model.BOARD_SIZE; y++) {
+            for (int x = 0; x < model.BOARD_SIZE; x++) {
+                Square square = model.board[y][x];
+                String borderstyle = "-fx-border-color: black; -fx-border-width:";
+                borderstyle += square.isHasWallUp() ? " 5px" : " 1px";
+                borderstyle += square.isHasWallRight() ? " 5px" : " 1px";
+                borderstyle += square.isHasWallDown() ? " 5px" : " 1px";
+                borderstyle += square.isHasWallLeft() ? " 5px;" : " 1px;";
+                gridPane.getChildren().get(y * model.BOARD_SIZE + x).setStyle(
+                        borderstyle);
+            }
+        }
+        System.out.printf("Steps: %d", model.getSteps());
+
+        if (model.isGameOver()){
+            loadEndScreen();
+        }
+    }
+
     @FXML
     private void handleKeyPress(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.UP) {
-            Logger.debug("UP pressed");
-            performMove(Direction.UP);
-        } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-            Logger.debug("RIGHT pressed");
-            performMove(Direction.RIGHT);
-        } else if (keyEvent.getCode() == KeyCode.DOWN) {
-            Logger.debug("DOWN pressed");
-            performMove(Direction.DOWN);
-        } else if (keyEvent.getCode() == KeyCode.LEFT) {
-            Logger.debug("LEFT pressed");
-            performMove(Direction.LEFT);
+        model.incrementSteps();
+        switch (keyEvent.getCode()) {
+            case UP -> {
+                Logger.info("{} pressed", keyEvent.getCode());
+                performMove(Direction.UP);
+            }
+            case RIGHT -> {
+                Logger.info("{} pressed", keyEvent.getCode());
+                performMove(Direction.RIGHT);
+            }
+            case DOWN -> {
+                Logger.info("{} pressed", keyEvent.getCode());
+                performMove(Direction.DOWN);
+            }
+            case LEFT -> {
+                Logger.info("{} pressed", keyEvent.getCode());
+                performMove(Direction.LEFT);
+            }
+            case R -> {
+                model.restartGame();
+                Logger.info("{} pressed", keyEvent.getCode());
+                Logger.info("Game Restarted!");
+            }
         }
         draw();
     }
@@ -75,7 +116,7 @@ public class BoardGameController {
         if (model.canMove(direction)) {
             Logger.info("Moving {}", direction);
             model.move(direction);
-            Logger.trace("New state: {}", model);
+            Logger.trace("New state: {}", model.getCurrentBallPosition().toString());
         } else {
             Logger.warn("Invalid move: {}", direction);
         }
@@ -93,29 +134,6 @@ public class BoardGameController {
     private Circle createBall() {
         Circle ball = new Circle(50, Color.BLUE);
         return ball;
-    }
-
-    public void draw() {
-        removeBall();
-
-        Position ballPosition = model.getCurrentBallPosition();
-        Circle ball = createBall();
-        gridPane.add(ball, ballPosition.getCol(), ballPosition.getRow());
-
-        System.out.println(model.getCurrentBallPosition().toString());
-        System.out.println(model.getCurrentBallPosition().getRow() * 7  + model.getCurrentBallPosition().getCol());
-        for (int y = 0; y < model.BOARD_SIZE; y++) {
-            for (int x = 0; x < model.BOARD_SIZE; x++) {
-                Square square = model.board[y][x];
-                String borderstyle = "-fx-border-color: black; -fx-border-width:";
-                borderstyle += square.isHasWallUp() ? " 5px" : " 1px";
-                borderstyle += square.isHasWallRight() ? " 5px" : " 1px";
-                borderstyle += square.isHasWallDown() ? " 5px" : " 1px";
-                borderstyle += square.isHasWallLeft() ? " 5px;" : " 1px;";
-                gridPane.getChildren().get(y * model.BOARD_SIZE + x).setStyle(
-                            borderstyle);
-            }
-        }
     }
 }
 
