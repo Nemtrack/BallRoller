@@ -1,4 +1,4 @@
-package boardgame;
+package boardgame.controller;
 
 import boardgame.model.BoardGameModel;
 import boardgame.model.Direction;
@@ -11,16 +11,21 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.tinylog.Logger;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BoardGameController {
 
@@ -29,6 +34,7 @@ public class BoardGameController {
 
     final private BoardGameModel model = new BoardGameModel();
 
+    private String name;
 
     @FXML
     private void initialize() {
@@ -38,10 +44,14 @@ public class BoardGameController {
     }
 
     private void populateGrid(){
+        Label label = new Label("CÉL");
+        label.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         for (var i = 0; i < gridPane.getRowCount(); i++) {
             for (var j = 0; j < gridPane.getColumnCount(); j++) {
                 var square = createSquare(i, j);
                 gridPane.add(square, j, i);
+                if (i == model.getGoal().getRow() && j == model.getGoal().getCol())
+                    square.getChildren().add(label);
             }
         }
     }
@@ -76,11 +86,29 @@ public class BoardGameController {
                         borderstyle);
             }
         }
-        System.out.printf("Steps: %d", model.getSteps());
-
         if (model.isGameOver()){
             loadEndScreen();
         }
+    }
+
+    private void loadEndScreen(){
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/endScene.fxml"));
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        }catch (IOException e){Logger.error(e.getLocalizedMessage());}
+        EndGameController controller = fxmlLoader.getController();
+        Scene scene = new Scene(root);
+        controller.setName(name);
+        controller.setSteps(model.getSteps());
+        Date now = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        controller.setVictoryTime(formatter.format(now));
+        Logger.info("Passing name: {}, victory date: {}, steps: {}, to next scene", controller.getName(),controller.getVictoryTime(),controller.getSteps());
+        controller.showLabels();
+        Stage stage = (Stage) this.gridPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -134,6 +162,11 @@ public class BoardGameController {
     private Circle createBall() {
         Circle ball = new Circle(50, Color.BLUE);
         return ball;
+    }
+
+    public void setName(String name){
+        this.name = name;
+        Logger.info("name was set to: {}",name);
     }
 }
 

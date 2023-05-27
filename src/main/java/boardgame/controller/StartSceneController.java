@@ -1,4 +1,4 @@
-package boardgame;
+package boardgame.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +22,11 @@ public class StartSceneController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gameStart.fxml"));
         Logger.info("Name entered: {}", nameField.getText());
         Parent root = fxmlLoader.load();
+        BoardGameController controller = fxmlLoader.getController();
         Scene scene = new Scene(root);
+        controller.setName(nameField.getText());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("BallRoller");
         stage.setScene(scene);
         stage.show();
     }
