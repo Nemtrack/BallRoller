@@ -10,8 +10,8 @@ public enum Direction {
     DOWN(1, 0),
     LEFT(0, -1);
 
-    private int rowChange;
-    private int colChange;
+    private final int rowChange;
+    private final int colChange;
 
     Direction(int rowChange, int colChange) {
         this.rowChange = rowChange;
@@ -32,21 +32,4 @@ public enum Direction {
     public int getColChange() {
         return colChange;
     }
-
-    /**
-     * {@return the direction that corresponds to the coordinate changes
-     * specified}
-     *
-     * @param rowChange the change in the row coordinate
-     * @param colChange the change in the column coordinate
-     */
-    public static Direction of(int rowChange, int colChange) {
-        for (var direction : values()) {
-            if (direction.rowChange == rowChange && direction.colChange == colChange) {
-                return direction;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
 }

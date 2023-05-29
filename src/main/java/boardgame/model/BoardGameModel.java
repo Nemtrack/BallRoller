@@ -11,18 +11,15 @@ public class BoardGameModel {
 
     private static int steps = 0;
 
-    /**
-     * The Position of the goal.
-     */
     private static final Position goal = new Position(5, 2);
 
+    /**
+     * @return the goal object
+     */
     public Position getGoal(){
-        return this.goal;
+        return goal;
     }
 
-    /**
-     * The starting position of the ball.
-     */
     private static final Position startingBallPosition = new Position(1, 4);
 
     private static final Position currentBallPosition = new Position(startingBallPosition.getRow(), startingBallPosition.getCol());
@@ -125,21 +122,36 @@ public class BoardGameModel {
         }
     }
 
+    /**
+     * @param position given will be decided if it is on the board
+     * @return true if the position given is on the board or false otherwise
+     */
     public boolean isOnBoard(Position position) {
         return position.getRow() >= 0 && position.getRow() < BOARD_SIZE &&
                 position.getCol() >= 0 && position.getCol() < BOARD_SIZE;
     }
 
+    /**
+     * @return true if the Ball's current position equals the goal
+     */
     public boolean isGameOver(){
         return currentBallPosition.equals(goal);
     }
 
+    /**
+     * Restarts the game by setting the current position to the starting position,
+     * while setting the used steps to 0
+     */
     public void restartGame(){
         currentBallPosition.setRow(startingBallPosition.getRow());
         currentBallPosition.setCol(startingBallPosition.getCol());
         steps = 0;
     }
 
+    /**
+     * Will move the Ball in the
+     * @param direction while it can move or the game is not ended or the ball is on the board
+     */
     public void move(Direction direction){
         if (canMove(direction))
             while (!isGameOver() && isOnBoard(currentBallPosition) && canMove(direction)) {
@@ -148,6 +160,10 @@ public class BoardGameModel {
             }
     }
 
+    /**
+     * @return true if the given
+     * @param direction is a valid move
+     */
     public boolean canMove(Direction direction) {
         return switch (direction) {
             case UP -> canMoveUp();
@@ -173,15 +189,24 @@ public class BoardGameModel {
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallLeft();
     }
 
+    /**
+     * Function for incrementing the steps
+     */
     public void incrementSteps(){
-        this.steps++;
+        steps++;
     }
 
+    /**
+     * @return the steps
+     */
     public int getSteps(){
-        return this.steps;
+        return steps;
     }
 
+    /**
+     * @return the current Ball position
+     */
     public Position getCurrentBallPosition(){
-        return this.currentBallPosition;
+        return currentBallPosition;
     }
 }

@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -27,6 +26,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Controller representing the {@link BoardGameModel}
+ */
 public class BoardGameController {
 
     @FXML
@@ -41,6 +43,7 @@ public class BoardGameController {
         populateGrid();
         registerKeyEventHandler();
         draw();
+        Logger.info("Game Initialized!");
     }
 
     private void populateGrid(){
@@ -48,15 +51,16 @@ public class BoardGameController {
         label.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         for (var i = 0; i < gridPane.getRowCount(); i++) {
             for (var j = 0; j < gridPane.getColumnCount(); j++) {
-                var square = createSquare(i, j);
+                var square = createSquare();
                 gridPane.add(square, j, i);
                 if (i == model.getGoal().getRow() && j == model.getGoal().getCol())
                     square.getChildren().add(label);
             }
         }
+        Logger.info("Grid Populated!");
     }
 
-    private StackPane createSquare(int row, int col) {
+    private StackPane createSquare() {
         var square = new StackPane();
         square.getStyleClass().add("square");
         square.setAlignment(Pos.CENTER);
@@ -67,22 +71,22 @@ public class BoardGameController {
         Platform.runLater(() -> gridPane.getScene().setOnKeyPressed(this::handleKeyPress));
     }
 
-    public void draw() {
+    private void draw() {
         removeBall();
 
         Position ballPosition = model.getCurrentBallPosition();
         Circle ball = createBall();
         gridPane.add(ball, ballPosition.getCol(), ballPosition.getRow());
 
-        for (int y = 0; y < model.BOARD_SIZE; y++) {
-            for (int x = 0; x < model.BOARD_SIZE; x++) {
-                Square square = model.board[y][x];
+        for (int y = 0; y < BoardGameModel.BOARD_SIZE; y++) {
+            for (int x = 0; x < BoardGameModel.BOARD_SIZE; x++) {
+                Square square = BoardGameModel.board[y][x];
                 String borderstyle = "-fx-border-color: black; -fx-border-width:";
                 borderstyle += square.isHasWallUp() ? " 5px" : " 1px";
                 borderstyle += square.isHasWallRight() ? " 5px" : " 1px";
                 borderstyle += square.isHasWallDown() ? " 5px" : " 1px";
                 borderstyle += square.isHasWallLeft() ? " 5px;" : " 1px;";
-                gridPane.getChildren().get(y * model.BOARD_SIZE + x).setStyle(
+                gridPane.getChildren().get(y * BoardGameModel.BOARD_SIZE + x).setStyle(
                         borderstyle);
             }
         }
@@ -103,17 +107,20 @@ public class BoardGameController {
         controller.setSteps(model.getSteps());
         Date now = new Date(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        controller.setVictoryTime(formatter.format(now));
-        Logger.info("Passing name: {}, victory date: {}, steps: {}, to next scene", controller.getName(),controller.getVictoryTime(),controller.getSteps());
+        controller.setTime(formatter.format(now));
+        Logger.info("Passing name: {}, victory date: {}, steps: {}, to next scene", controller.getName(),controller.getTime(),controller.getSteps());
         controller.showLabels();
+        controller.showTable();
         Stage stage = (Stage) this.gridPane.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+        Logger.info("EndScreen drawn!");
     }
 
     @FXML
     private void handleKeyPress(KeyEvent keyEvent) {
         model.incrementSteps();
+        Logger.info("Steps: {}",model.getSteps());
         switch (keyEvent.getCode()) {
             case UP -> {
                 Logger.info("{} pressed", keyEvent.getCode());
@@ -160,10 +167,12 @@ public class BoardGameController {
     }
 
     private Circle createBall() {
-        Circle ball = new Circle(50, Color.BLUE);
-        return ball;
+        return new Circle(50, Color.BLUE);
     }
 
+    /**
+     * Setter for the name variable
+     */
     public void setName(String name){
         this.name = name;
         Logger.info("name was set to: {}",name);

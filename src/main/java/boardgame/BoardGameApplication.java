@@ -7,12 +7,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class BoardGameApplication extends Application {
 
+    /**
+     * Starting the startScene and setting the Title while denying resizableness
+     */
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/startScene.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/startScene.fxml")));
         stage.setTitle("BallRoller");
         Scene scene = new Scene(root);
         stage.setScene(scene);
