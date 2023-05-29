@@ -48,7 +48,6 @@ public class GameResultStorage{
 
         try(var writer = new FileWriter(absoluteFilePath)){
             gameResultStorage.add(element);
-            // if (writer.toString().isEmpty())
             oj.writeValue(writer,gameResultStorage);
             Logger.info("element added");
         } catch (IOException e) {
