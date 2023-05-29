@@ -119,8 +119,6 @@ public class BoardGameController {
 
     @FXML
     private void handleKeyPress(KeyEvent keyEvent) {
-        model.incrementSteps();
-        Logger.info("Steps: {}",model.getSteps());
         switch (keyEvent.getCode()) {
             case UP -> {
                 Logger.info("{} pressed", keyEvent.getCode());
@@ -141,7 +139,8 @@ public class BoardGameController {
             case R -> {
                 model.restartGame();
                 Logger.info("{} pressed", keyEvent.getCode());
-                Logger.info("Game Restarted!");
+                Logger.info("Game restarted!");
+                Logger.info("Steps reseted!");
             }
         }
         draw();
@@ -152,6 +151,8 @@ public class BoardGameController {
             Logger.info("Moving {}", direction);
             model.move(direction);
             Logger.trace("New state: {}", model.getCurrentBallPosition().toString());
+            model.incrementSteps();
+            Logger.info("Steps: {}",model.getSteps());
         } else {
             Logger.warn("Invalid move: {}", direction);
         }
