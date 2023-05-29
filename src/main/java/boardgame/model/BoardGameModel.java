@@ -143,9 +143,16 @@ public class BoardGameModel {
      * while setting the used steps to 0
      */
     public void restartGame(){
+        resetPosition();
+        setSteps(0);
+    }
+
+    /**
+     * Resets the current position to the original starting position
+     */
+    public void resetPosition(){
         currentBallPosition.setRow(startingBallPosition.getRow());
         currentBallPosition.setCol(startingBallPosition.getCol());
-        steps = 0;
     }
 
     /**
@@ -197,6 +204,12 @@ public class BoardGameModel {
     }
 
     /**
+     * @param steps sets the steps in the model
+     * only used in test
+     */
+    public void setSteps(int steps){ BoardGameModel.steps = steps; }
+
+    /**
      * @return the steps
      */
     public int getSteps(){
@@ -208,5 +221,12 @@ public class BoardGameModel {
      */
     public Position getCurrentBallPosition(){
         return currentBallPosition;
+    }
+
+    /**
+     * @return the starting ball position
+     */
+    public Position getStartingBallPosition(){
+        return startingBallPosition;
     }
 }
