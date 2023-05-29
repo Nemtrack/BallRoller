@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.tinylog.Logger;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +25,12 @@ public class GameResultStorage{
      */
     public GameResultStorage() {
 
+        var fileName = "player.json";
+        String absolutePath = Path.of("").toAbsolutePath().toString();
+        String absoluteFilePath = absolutePath + File.separator + fileName;
+
         try {
-            gameResultStorage = oj.readValue(new FileReader("player.json"), new TypeReference<>() {
+            gameResultStorage = oj.readValue(new FileReader(absoluteFilePath), new TypeReference<>() {
             });
         } catch (IOException e) {
             Logger.error(e.getMessage());
@@ -35,8 +42,13 @@ public class GameResultStorage{
      * @param element a result a player got
      */
     public void addOne(GameResult element){
-        try(var writer = new FileWriter("player.json")){
+        var fileName = "player.json";
+        String absolutePath = Path.of("").toAbsolutePath().toString();
+        String absoluteFilePath = absolutePath + File.separator + fileName;
+
+        try(var writer = new FileWriter(absoluteFilePath)){
             gameResultStorage.add(element);
+            // if (writer.toString().isEmpty())
             oj.writeValue(writer,gameResultStorage);
             Logger.info("element added");
         } catch (IOException e) {
