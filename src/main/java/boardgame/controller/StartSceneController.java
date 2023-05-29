@@ -12,11 +12,17 @@ import org.tinylog.Logger;
 
 import java.io.IOException;
 
+/**
+ * Controller of the Starting Scene
+ */
 public class StartSceneController {
 
     @FXML
     private TextField nameField;
 
+    /**
+     * Starting the game with logging the name given, setting it and setting the Title of the Stage
+     */
     @FXML
     public void startGame(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gameStart.fxml"));
