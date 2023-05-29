@@ -9,10 +9,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The boardgame Application.
+ */
 public class BoardGameApplication extends Application {
 
     /**
-     * Starting the startScene and setting the Title while denying resizableness
+     * Starting the startScene and setting the Title while denying resizableness.
      */
     @Override
     public void start(Stage stage) throws IOException {

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Controller for the EndGame Scene
+ * Controller for the EndGame Scene.
  */
 public class EndGameController {
 
@@ -77,7 +77,7 @@ public class EndGameController {
     }
 
     /**
-     * Showing the labels on the EndGame Scene while saving the player
+     * Showing the labels on the EndGame Scene while saving the player.
      */
     public void showLabels(){
         Logger.info("Showing labels on EndGameController");

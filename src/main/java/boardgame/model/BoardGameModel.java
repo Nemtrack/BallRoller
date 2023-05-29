@@ -2,6 +2,9 @@ package boardgame.model;
 
 import java.util.ArrayList;
 
+/**
+ * The model of the boardgame.
+ */
 public class BoardGameModel {
 
     /**
@@ -140,7 +143,7 @@ public class BoardGameModel {
 
     /**
      * Restarts the game by setting the current position to the starting position,
-     * while setting the used steps to 0
+     * while setting the used steps to 0.
      */
     public void restartGame(){
         resetPosition();
@@ -148,7 +151,7 @@ public class BoardGameModel {
     }
 
     /**
-     * Resets the current position to the original starting position
+     * Resets the current position to the original starting position.
      */
     public void resetPosition(){
         currentBallPosition.setRow(startingBallPosition.getRow());
@@ -156,8 +159,8 @@ public class BoardGameModel {
     }
 
     /**
-     * Will move the Ball in the
-     * @param direction while it can move or the game is not ended or the ball is on the board
+     * Will move the Ball in the direction given if it can.
+     * @param direction the direction which the Ball will move in
      */
     public void move(Direction direction){
         if (canMove(direction))
@@ -168,8 +171,8 @@ public class BoardGameModel {
     }
 
     /**
-     * @return true if the given
-     * @param direction is a valid move
+     * @param direction a direction which the function will check if it is valid
+     * @return true if the given direction is valid
      */
     public boolean canMove(Direction direction) {
         return switch (direction) {
@@ -197,7 +200,7 @@ public class BoardGameModel {
     }
 
     /**
-     * Function for incrementing the steps
+     * Function for incrementing the steps.
      */
     public void incrementSteps(){
         steps++;
@@ -205,7 +208,6 @@ public class BoardGameModel {
 
     /**
      * @param steps sets the steps in the model
-     * only used in test
      */
     public void setSteps(int steps){ BoardGameModel.steps = steps; }
 

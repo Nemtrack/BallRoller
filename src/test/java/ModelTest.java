@@ -11,9 +11,6 @@ public class ModelTest {
     BoardGameModel model = new BoardGameModel();
     Position position = new Position(0, 0);
 
-    /**
-     * Setting up the test
-     */
     @BeforeEach
     public void setup(){
         model.setSteps(10);

@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Controller representing the {@link BoardGameModel}
+ * Controller representing the {@link BoardGameModel}.
  */
 public class BoardGameController {
 
@@ -172,7 +172,8 @@ public class BoardGameController {
     }
 
     /**
-     * Setter for the name variable
+     * Setter for the name variable.
+     * @param name will be the new name set for the name of the player
      */
     public void setName(String name){
         this.name = name;

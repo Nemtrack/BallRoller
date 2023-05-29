@@ -13,7 +13,7 @@ import org.tinylog.Logger;
 import java.io.IOException;
 
 /**
- * Controller of the Starting Scene
+ * Controller of the Starting Scene.
  */
 public class StartSceneController {
 
@@ -21,7 +21,9 @@ public class StartSceneController {
     private TextField nameField;
 
     /**
-     * Starting the game with logging the name given, setting it and setting the Title of the Stage
+     * Starting the game with logging the name given, setting it and setting the Title of the Stage.
+     * @param actionEvent the event required to trigger the method
+     * @throws IOException in case it couldn't find the resource
      */
     @FXML
     public void startGame(ActionEvent actionEvent) throws IOException {

@@ -9,7 +9,7 @@ public class Position {
     private int col;
 
     /**
-     * Constructor of the Position
+     * Constructor of the Position.
      * @param row representing the row of the Position
      * @param col representing the column of the Position
      */

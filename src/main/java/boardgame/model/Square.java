@@ -1,5 +1,8 @@
 package boardgame.model;
 
+/**
+ * Represents a square on the board.
+ */
 public class Square {
 
     private boolean hasWallUp;
