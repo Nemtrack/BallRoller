@@ -147,7 +147,7 @@ public class BoardGameModel {
      */
     public void restartGame(){
         resetPosition();
-        setSteps(0);
+        resetSteps();
     }
 
     /**
@@ -168,6 +168,7 @@ public class BoardGameModel {
                 currentBallPosition.setRow(currentBallPosition.getRow() + direction.getRowChange());
                 currentBallPosition.setCol(currentBallPosition.getCol() + direction.getColChange());
             }
+        incrementSteps();
     }
 
     /**
@@ -199,17 +200,11 @@ public class BoardGameModel {
         return !board[currentBallPosition.getRow()][currentBallPosition.getCol()].isHasWallLeft();
     }
 
-    /**
-     * Function for incrementing the steps.
-     */
-    public void incrementSteps(){
+    private void incrementSteps(){
         steps++;
     }
 
-    /**
-     * @param steps sets the steps in the model
-     */
-    public void setSteps(int steps){ BoardGameModel.steps = steps; }
+    private void resetSteps(){ BoardGameModel.steps = 0; }
 
     /**
      * @return the steps

@@ -151,7 +151,6 @@ public class BoardGameController {
             Logger.info("Moving {}", direction);
             model.move(direction);
             Logger.trace("New state: {}", model.getCurrentBallPosition().toString());
-            model.incrementSteps();
             Logger.info("Steps: {}",model.getSteps());
         } else {
             Logger.warn("Invalid move: {}", direction);

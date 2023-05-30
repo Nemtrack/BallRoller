@@ -13,29 +13,9 @@ public class ModelTest {
 
     @BeforeEach
     public void setup(){
-        model.setSteps(10);
         model.resetPosition();
         position.setCol(0);
         position.setRow(0);
-    }
-
-    @Test
-    void incrementSteps(){
-        model.incrementSteps();
-        assertEquals(11,model.getSteps());
-    }
-
-    @Test
-    void incrementStepsRepetitively(){
-        for(int i = 0; i <= 10; i++)
-            model.incrementSteps();
-        assertEquals(21, model.getSteps());
-    }
-
-    @Test
-    void setSteps(){
-        model.setSteps(20);
-        assertEquals(20,model.getSteps());
     }
 
     @Test

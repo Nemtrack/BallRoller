@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.tinylog.Logger;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,9 +24,7 @@ public class GameResultStorage{
      */
     public GameResultStorage() {
 
-        var fileName = "player.json";
-        String absolutePath = Path.of("").toAbsolutePath().toString();
-        String absoluteFilePath = absolutePath + File.separator + fileName;
+        String absoluteFilePath = Path.of("player.json").toAbsolutePath().toString();
 
         try {
             gameResultStorage = oj.readValue(new FileReader(absoluteFilePath), new TypeReference<>() {
@@ -42,9 +39,7 @@ public class GameResultStorage{
      * @param element a result a player got
      */
     public void addOne(GameResult element){
-        var fileName = "player.json";
-        String absolutePath = Path.of("").toAbsolutePath().toString();
-        String absoluteFilePath = absolutePath + File.separator + fileName;
+        String absoluteFilePath = Path.of("player.json").toAbsolutePath().toString();
 
         try(var writer = new FileWriter(absoluteFilePath)){
             gameResultStorage.add(element);
