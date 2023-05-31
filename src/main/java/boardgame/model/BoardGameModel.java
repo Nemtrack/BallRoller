@@ -16,16 +16,14 @@ public class BoardGameModel {
 
     private static final Position goal = new Position(5, 2);
 
-    /**
-     * @return the goal object
-     */
-    public Position getGoal(){
-        return goal;
-    }
-
     private static final Position startingBallPosition = new Position(1, 4);
 
     private static final Position currentBallPosition = new Position(startingBallPosition.getRow(), startingBallPosition.getCol());
+
+    /**
+     * Initialization of the board.
+     */
+    public static final Square[][] board = new Square[BOARD_SIZE][BOARD_SIZE];
 
     private static final ArrayList<Position> hasUpperWalls = new ArrayList<>();
 
@@ -82,11 +80,6 @@ public class BoardGameModel {
         hasLeftWalls.add(new Position(6, 4));
         hasLeftWalls.add(new Position(6, 6));
     }
-
-    /**
-     * Initialization of the board.
-     */
-    public static final Square[][] board = new Square[BOARD_SIZE][BOARD_SIZE];
 
     /**
      * Setting up the walls for the board.
@@ -158,6 +151,8 @@ public class BoardGameModel {
         currentBallPosition.setCol(startingBallPosition.getCol());
     }
 
+    private void resetSteps(){ BoardGameModel.steps = 0; }
+
     /**
      * Will move the Ball in the direction given if it can.
      * @param direction the direction which the Ball will move in
@@ -204,13 +199,18 @@ public class BoardGameModel {
         steps++;
     }
 
-    private void resetSteps(){ BoardGameModel.steps = 0; }
-
     /**
      * @return the steps
      */
     public int getSteps(){
         return steps;
+    }
+
+    /**
+     * @return the goal object
+     */
+    public Position getGoal(){
+        return goal;
     }
 
     /**
