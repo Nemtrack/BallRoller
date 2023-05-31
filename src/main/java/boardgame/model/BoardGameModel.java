@@ -128,7 +128,7 @@ public class BoardGameModel {
     }
 
     /**
-     * @return true if the Ball's current position equals the goal
+     * {@return true if the Ball's current position equals the goal}
      */
     public boolean isGameOver(){
         return currentBallPosition.equals(goal);

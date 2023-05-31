@@ -100,7 +100,7 @@ public class EndGameController {
     public void showTable(){
         List<GameResult> gameResultList = gameResultStorage.toList();
         resultField.setText("Previous results: \n");
-        for(int i=gameResultList.size()-1;i>(gameResultList.size() > 10 ? gameResultList.size()-11 : 0);i--){
+        for(int i=0; i<Math.min(10, gameResultList.size()); i++){
             resultField.setText(resultField.getText() + gameResultList.get(i).toString()+"\n");
         }
     }

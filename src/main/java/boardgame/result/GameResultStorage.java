@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -54,6 +55,9 @@ public class GameResultStorage{
      * @return a list of game results of the storage
      */
     public List<GameResult> toList(){
-        return new ArrayList<>(gameResultStorage);
+        return new ArrayList<>(gameResultStorage)
+                .stream()
+                .sorted(Comparator.comparingInt(GameResult::getSteps))
+                .toList();
     }
 }
